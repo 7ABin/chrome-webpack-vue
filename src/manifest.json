@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "yapi-create-url",
+  "version": "1.0",
+  "action": {
+    "default_title": "Create-vue",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "activeTab",
+    "storage",
+    "nativeMessaging"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "run_at": "document_idle",
+      "js": [
+        "contentScript.js"
+      ]
+    }
+  ]
+}
