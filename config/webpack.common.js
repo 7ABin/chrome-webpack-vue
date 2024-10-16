@@ -48,17 +48,14 @@ const common={
             generate: (seed, files) => {
                 // 读取原始的 manifest.json 文件
                 const manifest = JSON.parse(fs.readFileSync(resolve(__dirname, '../src/manifest.json'), 'utf-8'));
-                console.log(files)
                 // 查找并替换文件路径
                 const fileMap = files.reduce((map, file) => {
                     map[file.name] = file.path;
                     return map;
                 }, {});
-                console.log(seed,'2222')
                 // 替换 background 和 content script 的路径
                 manifest.background.service_worker = fileMap['background.js'];
                 manifest.content_scripts[0].js = [fileMap['contentScript.js']];
-
                 return manifest;
             }
         })
@@ -83,7 +80,7 @@ const common={
             },
             {
                 test: /\.css$/,
-                use: ['vue-style-loader','css-loader'],
+                use: ['vue-style-loader','css-loader','postcss-loader'],
             },
         ],
     },
