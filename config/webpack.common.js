@@ -8,6 +8,7 @@ const htmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const IMAGE_TYPES = /\.(png|jpe?g|gif|svg)$/i;
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+const { ProgressPlugin } = require("webpack")
 const fs = require('fs');
 const common={
     output:  {
@@ -25,6 +26,7 @@ const common={
         excludeAssets: [IMAGE_TYPES],
     },
     plugins: [
+
         new VueLoaderPlugin(),
         new htmlWebpackPlugin({
             template: resolve(__dirname, '../src/popup/index.html'),
@@ -48,20 +50,26 @@ const common={
             generate: (seed, files) => {
                 // 读取原始的 manifest.json 文件
                 const manifest = JSON.parse(fs.readFileSync(resolve(__dirname, '../src/manifest.json'), 'utf-8'));
-                console.log(files)
                 // 查找并替换文件路径
                 const fileMap = files.reduce((map, file) => {
                     map[file.name] = file.path;
                     return map;
                 }, {});
-                console.log(seed,'2222')
                 // 替换 background 和 content script 的路径
                 manifest.background.service_worker = fileMap['background.js'];
                 manifest.content_scripts[0].js = [fileMap['contentScript.js']];
-
                 return manifest;
             }
-        })
+        }),
+        new ProgressPlugin({
+            activeModules: true,
+            entries: true,
+            modules: false,
+            modulesCount: 5000,
+            profile: false,
+            dependencies: false,
+            dependenciesCount: 10000,
+        }),
     ],
     module: {
         rules: [
@@ -83,7 +91,7 @@ const common={
             },
             {
                 test: /\.css$/,
-                use: ['vue-style-loader','css-loader'],
+                use: ['vue-style-loader','css-loader','postcss-loader'],
             },
         ],
     },

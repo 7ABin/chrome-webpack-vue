@@ -4,7 +4,8 @@ const common = require('./webpack.common.js');
 const { merge } = require('webpack-merge');
 const path = require('node:path');
 const config =(env,argv)=> {
-    const production = {
+    const configuration = {
+        mode: argv.mode,
         entry:{
             popup:path.resolve(__dirname, '../src/popup/main.js'),
             contentScript: path.resolve(__dirname, '../src/contentScript/index.js'),
@@ -12,20 +13,27 @@ const config =(env,argv)=> {
         },
     }
     console.log(argv)
+    if(argv?.mode === 'development'){
+        configuration.devtool = 'inline-source-map';
+    }
     if(argv?.mode === 'production'){
-        production.optimization={
+        configuration.optimization={
+            minimize: true,
             minimizer:[
                new TerserPlugin({
                    minify: TerserPlugin.uglifyJsMinify,
                    terserOptions:{
-                       compress:{
-                           drop_console:true
-                       }
+                       // compress:{
+                       //     drop_console:true
+                       // },
+                       output: {
+                           comments: false,  // 移除注释
+                       },
                    }
-                })
+               })
             ]
         }
     }
-    return merge(common,production)
+    return merge(common,configuration)
 }
 module.exports = config;
