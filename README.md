@@ -1,2 +1,4 @@
-# chrome-webpack-vue
-基于vue3 + webpack5搭建的谷歌插件
+# chrome-yapi-plugin
+剩余问题
+1.插件配置页面搞个重置  
+2.服务器名称提上来用输入框进行区分

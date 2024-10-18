@@ -8,6 +8,7 @@ const htmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const IMAGE_TYPES = /\.(png|jpe?g|gif|svg)$/i;
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+const { ProgressPlugin } = require("webpack")
 const fs = require('fs');
 const common={
     output:  {
@@ -25,6 +26,7 @@ const common={
         excludeAssets: [IMAGE_TYPES],
     },
     plugins: [
+
         new VueLoaderPlugin(),
         new htmlWebpackPlugin({
             template: resolve(__dirname, '../src/popup/index.html'),
@@ -58,7 +60,16 @@ const common={
                 manifest.content_scripts[0].js = [fileMap['contentScript.js']];
                 return manifest;
             }
-        })
+        }),
+        new ProgressPlugin({
+            activeModules: true,
+            entries: true,
+            modules: false,
+            modulesCount: 5000,
+            profile: false,
+            dependencies: false,
+            dependenciesCount: 10000,
+        }),
     ],
     module: {
         rules: [

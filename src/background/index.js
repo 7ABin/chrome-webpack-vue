@@ -1,32 +1,27 @@
-const listeners = ['yapi.linshimuye.com/api/interface/list_cat','yapi.linshimuye.com/api/interface/list']
+
 // 黑名单监听
-const blackList = ['yapi.linshimuye.com/api/interface/list_menu']
+// const blackList = ['yapi.linshimuye.com/api/interface/list_menu']
+import {listeners} from "../utils/api-listener";
+
 let list = []
 chrome.webRequest.onCompleted.addListener(
     function(details) {
         const isExtensionRequest = details.initiator?.includes('yapi.linshimuye.com');
         if (details.type === 'xmlhttprequest' && details.statusCode === 200 && isExtensionRequest) {
             let flag = false
-            for(let item of listeners){
-                const isBlackUrl = blackList.some(item =>details.url.includes(item))
-                console.log(isBlackUrl)
-                if(isBlackUrl) {
-                    flag = false
-                    break
-                }
+            for(let item in listeners){
                 if(details.url.includes(item)){
-                    flag = true
+                    flag = item
                     break
                 }
             }
+            console.log(flag,'flag565')
             if(!flag) return;
             fetch(details.url, {credentials: 'include'})
                 .then(response => response.json())
                 .then(res => {
-                    const data = res.data?.list||''
-                    if(data){
-                        list = data || []
-                    }
+                   const callBack = listeners[flag]
+                    list = callBack?.(res)||[]
                 }).catch(error => {
                 console.error('Error fetching the API response:', error)
             });
