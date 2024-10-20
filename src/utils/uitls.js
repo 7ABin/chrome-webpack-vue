@@ -1,11 +1,11 @@
 import {message} from "ant-design-vue";
 
 export const replacedCode = (code,obj) => {
-  return code.replace(/%(\w+)%/g, (match, p1) => {
+  return code.replace(/%(.*?)%/g, (match, p1) => {
     const toChange = p1.startsWith('$')?'$':p1.startsWith('#')?'#':''
     let key = p1
     if(toChange){
-      key= key.splice(1)
+      key= key.slice(1)
     }
     let val = obj[key]
     if(toChange==='$'){
@@ -13,6 +13,7 @@ export const replacedCode = (code,obj) => {
     }else if(toChange==='#'){
       val = val.toUpperCase()
     }
+    console.log(match,p1,val)
     return val??match
   });
 }

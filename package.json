@@ -13,6 +13,7 @@
   "author": "bin",
   "license": "ISC",
   "dependencies": {
+    "@ant-design/icons-vue": "^7.0.1",
     "ant-design-vue": "^4.2.5",
     "codemirror": "^5.65.18",
     "codemirror-editor-vue3": "^2.8.0",

@@ -4,7 +4,7 @@ import {
     Tabs,
     TabPane,
     Input,
-    Textarea,
+    Tooltip,
     Switch
 } from 'ant-design-vue'
 // 注册组件
@@ -15,7 +15,7 @@ export default {
     Space,
     Tabs,
     TabPane,
-    Textarea,
     Input,
-    Switch
+    Switch,
+    Tooltip
 }
